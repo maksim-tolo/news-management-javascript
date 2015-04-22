@@ -1,24 +1,24 @@
 module.exports = function (connection) {
     return {
-        getNumberOfRows: function (req, res) {
+        getNumberOfPages: function (req, res) {
             connection.query('SELECT COUNT(*) FROM news', function(err, result) {
                 if(err) {
                     console.log(err);
                     return;
                 }
                 for (var i in result[0]) {
-                    res.send({numberOfRows: result[0][i]});
+                    res.send({numberOfPages: Math.ceil(result[0][i]/10)});
                     return;
                 }
             });
         },
-        getAllNews: function (req, res) {
+        getNewsFromPage: function (req, res) {
             connection.query('SELECT id, title, shortDescription, creationDate, modificationDate FROM news', function(err, result) {
                 if(err) {
                     console.log(err);
                     return;
                 }
-                res.send(result);
+                res.send(result.splice((req.params.pageNumber-1)*10, 10).reverse());
             });
         },
         getNews: function (req, res) {

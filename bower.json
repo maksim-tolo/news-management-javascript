@@ -1,0 +1,25 @@
+{
+  "name": "news-management-javascript",
+  "version": "1.0.0",
+  "homepage": "https://github.com/maksim-tolo/news-management-javascript",
+  "authors": [
+    "Maksim Talochka <maksim_talochka@epam.com>"
+  ],
+  "main": "index.js",
+  "moduleType": [
+    "node"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "public/bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "~2.1.3"
+  }
+}

@@ -3,8 +3,44 @@
 <head lang="en">
     <meta charset="UTF-8">
     <title>News manager</title>
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <link rel="stylesheet" type="text/css" href="css/fonts.css">
+    <script src="bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="js/translation.js"></script>
+    <script src="js/ripple.js"></script>
+    <script src="js/httpService.js"></script>
+    <script src="js/app.js"></script>
 </head>
 <body>
-    <div>hello, world!</div>
+    <header>
+        <div class="ripple icon-language"></div>
+        <ul class="langMenu">
+            <li>English</li>
+            <li>Русский</li>
+        </ul>
+    </header>
+    <aside>
+        <div class="floating icon-add ripple">
+            <p>Add</p>
+        </div>
+        <div class="floating icon-edit ripple">
+            <p>Edit</p>
+        </div>
+        <div class="floating icon-delete ripple">
+            <p>Delete</p>
+        </div>
+    </aside>
+    <main>
+        <div><h4>Title</h4>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus aliquam animi asperiores beatae commodi consequatur consequuntur cumque ea ex expedita, illo illum obcaecati quidem sed sit tempore temporibus. Accusantium, beatae.</p>
+        </div>
+        <div>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Architecto asperiores, at beatae cumque dolorum fugit id incidunt ipsa itaque magni nesciunt nisi nobis nostrum officia pariatur praesentium quia reprehenderit tenetur!</div>
+        <div>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Animi atque consectetur culpa deserunt dolor eius esse expedita minus molestias odio, pariatur perferendis porro quaerat quisquam repellendus rerum similique sit temporibus.</div>
+        <div>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Animi porro quod temporibus veritatis voluptas. Ad aliquam, animi blanditiis consequuntur culpa est fuga qui sapiente. Animi aperiam architecto excepturi nisi porro?</div>
+        <div>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ad, aperiam consequuntur cumque deserunt dolorum exercitationem facilis id nisi nostrum odit porro rerum tempore unde velit, voluptatibus. Est iusto quaerat sequi?</div>
+    </main>
+
+    <footer>News Management (c) 2015</footer>
+
 </body>
 </html>
