@@ -1,4 +1,4 @@
-var LANG = {
+App.prototype.LANG = {
     ru: {
         addNews: "Добавить новость",
         view: "Просмотреть",
