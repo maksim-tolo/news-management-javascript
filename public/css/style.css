@@ -14,6 +14,7 @@ header {
     background: #009688;
 }
 header .icon-language {
+    outline: none;
     display: block;
     position: fixed;
     top: 0;
@@ -24,7 +25,9 @@ header .icon-language {
     color: rgba(255,255,255,.84);
 }
 .langMenu {
-    display: none;
+    opacity: 0;
+    visibility: hidden;
+    transition: visibility 0.5s;
     background: #fff;
     position: fixed;
     right: 25px;
@@ -49,6 +52,10 @@ header .icon-language {
 }
 .langMenu li:hover {
     color: rgb(0, 150, 136);
+}
+.icon-language:focus + .langMenu {
+    opacity: 1;
+    visibility: visible;
 }
 aside {
     margin: 10px;
@@ -133,11 +140,14 @@ main div {
 .icon-add {
     top: 70px;
 }
+.icon-list {
+    top: 70px;
+}
 .icon-edit {
-    top: 140px;
+    top: 210px;
 }
 .icon-delete {
-    top: 210px;
+    top: 140px;
 }
 .ripple {
     overflow:hidden;
@@ -170,4 +180,66 @@ main div {
         transform: scale(+100);
         opacity: 0;
     }
+}
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    list-style: none;
+    padding: 0;
+    margin: 5px;
+}
+.pagination li {
+    display: inline;
+    text-align: center;
+}
+.pagination a {
+    border-color: #ddd;
+    color: #4285F4;
+    background: #fff;
+    float: left;
+    display: block;
+    font-size: 14px;
+    text-decoration: none;
+    padding: 5px 12px;
+    margin-left: -1px;
+    line-height: 1.5;
+}
+.pagination a.active {
+    border-color: #4285F4;
+    background: #4285F4;
+    color: #fff;
+    cursor: default;
+}
+.pagination a:active {
+    border-color: #4285F4;
+    background: #4285F4;
+    color: #fff;
+    outline: none;
+}
+.pagination li:first-child a {
+    -moz-border-radius: 6px 0 0 6px;
+    -webkit-border-radius: 6px;
+    border-radius: 6px 0 0 6px;
+}
+.pagination li:last-child a {
+    -moz-border-radius: 0 6px 6px 0;
+    -webkit-border-radius: 0;
+    border-radius: 0 6px 6px 0;
+}
+.pagination a:hover {
+    background: #eee;
+}
+.pagination a.active:hover {
+    background: #4285F4;
+}
+.disabled {
+    cursor: not-allowed;
+}
+.backButton {
+    top: 5px;
+    left: 35px;
+    padding: 8px;
+    width: 40px;
+    height: 40px;
 }

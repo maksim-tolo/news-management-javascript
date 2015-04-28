@@ -4,11 +4,9 @@ module.exports = function(app, controller) {
         res.sendfile('../public/index.html');
     });
 
-    app.get('/api/numberOfPages', controller.getNumberOfPages);
+    app.get('/api/news', controller.getNewsList);
 
-    app.get('/api/news/page/:pageNumber', controller.getNewsFromPage);
-
-    app.get('/api/news/:id', controller.getNews);
+    app.get('/api/news/:id', controller.getNewsById);
 
     app.post('/api/news/:id', controller.changeNews);
 

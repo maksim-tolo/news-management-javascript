@@ -1,60 +1,46 @@
 module.exports = function (connection) {
     return {
-        getNumberOfPages: function (req, res) {
-            connection.query('SELECT COUNT(*) FROM news', function(err, result) {
+        getNewsList: function (req, res, next) {//логику работы с бз в отдельный сервис
+            connection.query('SELECT id, title, shortDescription, creationDate, modificationDate FROM news ORDER BY id DESC LIMIT ' + req.query.limit + ' OFFSET ' + req.query.from, function(err, result) {
                 if(err) {
-                    console.log(err);
-                    return;
+                    next(err);
                 }
-                for (var i in result[0]) {
-                    res.send({numberOfPages: Math.ceil(result[0][i]/10)});
-                    return;
-                }
+                connection.query('SELECT COUNT(*) FROM news', function(err, numberOfNews) {
+                    if(err) {
+                        next(err);
+                    }
+                    res.send({newsList: result, numberOfNews: numberOfNews[0]["COUNT(*)"]});
+                });
             });
         },
-        getNewsFromPage: function (req, res) {
-            connection.query('SELECT id, title, shortDescription, creationDate, modificationDate FROM news', function(err, result) {
+        getNewsById: function (req, res, next) {
+            connection.query('SELECT id, title, shortDescription, creationDate, modificationDate, body FROM news where id = ' + connection.escape(req.params.id), function(err, result) {
                 if(err) {
-                    console.log(err);
-                    return;
-                }
-                res.send(result.splice((req.params.pageNumber-1)*10, 10).reverse());
-            });
-        },
-        getNews: function (req, res) {
-            connection.query('SELECT * FROM news where id = ?', req.params.id, function(err, result) {
-                if(err) {
-                    console.log(err);
-                    return;
+                    next(err);
                 }
                 res.send(result);
             });
         },
-        changeNews: function (req, res) {
-            req.body.modificationDate = new Date();
-            connection.query('UPDATE news SET ? WHERE id = ?', [req.body, req.params.id], function(err) {
+        changeNews: function (req, res, next) {
+            connection.query('UPDATE news SET ' + connection.escape(req.body) + ', modificationDate=' + connection.escape(new Date()) + ' WHERE id = ' + connection.escape(req.params.id), function(err) {
                 if(err) {
-                    console.log(err);
-                    return;
+                    next(err);
                 }
                 res.end();
             });
         },
-        addNews: function (req, res) {
-            req.body.creationDate = req.body.modificationDate = new Date();
-            connection.query('INSERT INTO news set ?', req.body, function(err) {
+        addNews: function (req, res, next) {
+            connection.query('INSERT INTO news SET ' + connection.escape(req.body) + ', creationDate=' + connection.escape(new Date()) + ', modificationDate=' + connection.escape(new Date()), function(err) {
                 if(err) {
-                    console.log(err);
-                    return;
+                    next(err);
                 }
                 res.end();
             });
         },
-        deleteNews: function (req, res) {
-            connection.query('DELETE FROM news WHERE id = ?', req.params.id, function(err) {
+        deleteNews: function (req, res, next) {
+            connection.query('DELETE FROM news WHERE id = ' + connection.escape(req.params.id), function(err) {
                 if(err) {
-                    console.log(err);
-                    return;
+                    next(err);
                 }
                 res.end();
             });

@@ -1,29 +1,20 @@
 App.prototype.httpService = {
 
-    getNumberOfPages: function (callback) {
+    getNewsList: function (params, callback) {
         $.ajax({
-            url: '/api/numberOfPages',
-            method: 'GET'
-        }).done(function (data) {
-            callback(data.numberOfPages);
+            url: '/api/news',
+            method: 'GET',
+            traditional: true,
+            data: params,
+            success: callback
         });
     },
 
-    getNewsFromPage: function (pageNumber, callback) {
-        $.ajax({
-            url: '/api/news/page/' + pageNumber,
-            method: 'GET'
-        }).done(function (data) {
-            callback(data);
-        });
-    },
-
-    getNews: function (id, callback) {
+    getNewsById: function (id, callback) {
         $.ajax({
             url: '/api/news/' + id,
-            method: 'GET'
-        }).done(function (data) {
-            callback(data);
+            method: 'GET',
+            success: callback
         });
     },
 
@@ -31,9 +22,8 @@ App.prototype.httpService = {
         $.ajax({
             url: '/api/news/' + id,
             method: 'POST',
-            data: newData
-        }).done(function (data) {
-            callback(data);
+            data: newData,
+            success: callback
         });
     },
 
@@ -41,18 +31,17 @@ App.prototype.httpService = {
         $.ajax({
             url: '/api/news',
             method: 'PUT',
-            data: newData
-        }).done(function (data) {
-            callback(data);
+            data: newData,
+            success: callback
         });
     },
 
     deleteNews: function (id, callback) {
         $.ajax({
             url: '/api/news/' + id,
-            method: 'DELETE'
-        }).done(function (data) {
-            callback(data);
+            method: 'DELETE',
+            success: callback
         });
     }
+
 };

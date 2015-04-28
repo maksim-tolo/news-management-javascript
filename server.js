@@ -28,6 +28,11 @@ app.use(bodyParser.urlencoded({ extended: true }));
 var controller = require('./controllers/controller')(connection);
 require('./routes/routes.js')(app, controller);
 
+app.use(function(err, req, res, next) {
+    console.log(err);
+    res.status(500).end();
+});
+
 app.listen(port);
 console.log("App listening on port " + port);
 

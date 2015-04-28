@@ -7,17 +7,17 @@ module.exports = function(connection) {
         this.creationDate = this.modificationDate = new Date();
     };
 
-    connection.query('INSERT INTO news set ?', new Data(), function(err) {
+    connection.query('INSERT INTO news set ' + connection.escape(new Data()), function(err) {
         if(err) {
             console.log(err);
         }
     });
-    connection.query('INSERT INTO news set ?', new Data(), function(err) {
+    connection.query('INSERT INTO news set ' + connection.escape(new Data()), function(err) {
         if(err) {
             console.log(err);
         }
     });
-    connection.query('INSERT INTO news set ?', new Data(), function(err) {
+    connection.query('INSERT INTO news set ' + connection.escape(new Data()), function(err) {
         if(err) {
             console.log(err);
         }
