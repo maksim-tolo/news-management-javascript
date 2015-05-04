@@ -9,8 +9,8 @@ App.prototype.LANG = {
         editNews: "Изменить новость",
         listNews: "Список новостей",
         title: "Заголовок:",
-        shortDescription: "Краткое описание",
-        fullDescription: "Полное описание",
+        shortDescription: "Краткое описание:",
+        fullDescription: "Полное описание:",
         save: "Сохранить",
         cancel: "Отмена",
         modalBody: "Вы действительно хотите удалить эту новость?"
@@ -25,8 +25,8 @@ App.prototype.LANG = {
         editNews: "Edit News",
         listNews: "List News",
         title: "Title:",
-        shortDescription: "Short description",
-        fullDescription: "Full description",
+        shortDescription: "Short description:",
+        fullDescription: "Full description:",
         save: "Save",
         cancel: "Cancel",
         modalBody: "Are you sure to delete this news article?"

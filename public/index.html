@@ -12,8 +12,98 @@
     <script src="js/ripple.js"></script>
     <script src="js/httpService.js"></script>
     <script src="js/states.js"></script>
+    <script src="js/templateParser.js"></script>
 </head>
 <body>
+
+    <script type="text/html" id="listNewsTemplate">
+        <% for (var i = 0; i < newsList.length; i++) { %>
+            <div>
+                <h1><%=newsList[i].title%></h1>
+                <p><%=newsList[i].shortDescription%></p>
+                <div class="clearfix">
+                    <button class="view">
+                        <a href="#news/<%=newsList[i].id%>" data-translation="view"></a>
+                    </button>
+                    <button class="edit">
+                        <a href="#editNews/<%=newsList[i].id%>" data-translation="edit"></a>
+                    </button>
+                    <button class="delete">
+                        <a href="#news/<%=newsList[i].id%>" data-translation="delete"></a>
+                    </button>
+                </div>
+            </div>
+        <% } %>
+    </script>
+
+    <script type="text/html" id="asideButtonsTemplate">
+        <% for (var i = 0; i < floating.length; i++) { %>
+            <a href="<%=floating[i].href%>" class="floating <%=floating[i].class%> ripple">
+                <p data-translation="<%=floating[i].dataAttr%>"></p>
+            </a>
+        <% } %>
+    </script>
+
+    <script type="text/html" id="newsMessageTemplate">
+        <div>
+            <h1><%=title%></h1>
+            <p><%=shortDescription%></p>
+            <p><%=body%></p>
+        </div>
+    </script>
+
+    <script type="text/html" id="addOrChangeNewsTemplate">
+        <form>
+            <div class="group title">
+                <textarea maxlength="30" required><%=title%></textarea>
+                <label data-translation="title"></label>
+            </div>
+            <div class="group shortDescription">
+                <textarea maxlength="255" required><%=shortDescription%></textarea>
+                <label data-translation="shortDescription"></label>
+            </div>
+            <div class="group fullDescription">
+                <textarea required><%=body%></textarea>
+                <label data-translation="fullDescription"></label>
+            </div>
+            <button class="submit ripple" data-translation="save"></button>
+        </form>
+    </script>
+
+    <script type="text/html" id="pagination">
+        <ul class="pagination">
+            <% if (curPage == 1) { %>
+                <li>
+                    <a href="#page/<%=curPage%>" class="prev disabled">&laquo</a>
+                </li>
+            <% } else {%>
+                <li>
+                    <a href="#page/<%=curPage-1%>" class="prev">&laquo</a>
+                </li>
+            <% } %>
+            <% for (var i = startPage; i <= numberOfPages && i <= lastPage; i++) { %>
+                <% if (i == curPage) { %>
+                    <li>
+                        <a class="active" href="#page/<%=i%>"><%=i%></a>
+                    </li>
+                <% } else {%>
+                    <li>
+                        <a href="#page/<%=i%>"><%=i%></a>
+                    </li>
+                <% } %>
+            <% } %>
+            <% if (curPage == numberOfPages) { %>
+                <li>
+                    <a href="#page/<%=curPage%>" class="next disabled">&raquo</a>
+                </li>
+            <% } else {%>
+                <li>
+                    <a href="#page/<%=curPage+1%>" class="next">&raquo</a>
+                </li>
+            <% } %>
+        </ul>
+    </script>
+
     <header>
         <div tabindex="0" class="ripple icon-language"></div>
         <ul class="langMenu">

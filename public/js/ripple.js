@@ -1,5 +1,5 @@
 App.prototype.ripple = function(e) {
-    e.preventDefault();
+    //e.preventDefault();
     var $div = $('<div>'),
         btnOffset = $(this).offset(),
         xPos = e.pageX - btnOffset.left,

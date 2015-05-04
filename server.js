@@ -25,12 +25,19 @@ app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-var controller = require('./controllers/controller')(connection);
+var mySQLService = require('./services/mySQLService')(connection);
+var controller = require('./controllers/controller')(mySQLService);
 require('./routes/routes.js')(app, controller);
+
+app.use(function(req, res, next) {
+    var err = new Error('Not Found');
+    err.status = 404;
+    next(err);
+});
 
 app.use(function(err, req, res, next) {
     console.log(err);
-    res.status(500).end();
+    res.status(err.status || 500).end();
 });
 
 app.listen(port);

@@ -5,17 +5,14 @@ $(function() {
 });
 
 function App() {
+    this.templateCache = {};
     this.numberOfPages = 1;
     this.userLang = this.LANG.en;   //сделать отложенную загрузку
 }
 
 App.prototype.init = function() {
     this.defineLang();
-    this.onChangeLang();
-    this.onRipple();
-    this.onHashChange();
-    this.onBack();
-    this.onFloating();
+    this.eventsListeners();
     this.render();
 };
 
@@ -29,36 +26,7 @@ App.prototype.changeLang = function(e) {
     if(lang) {
         localStorage.setItem("userLang", lang);
         this.userLang = this.LANG[lang];
-    }
-    this.render();
-};
-
-App.prototype.drawPagination = function(curPage) {
-    var temp = Math.ceil(curPage / 5);
-    var $ul = $('<ul>');
-    $ul.addClass('pagination');
-    $("main").append($ul);
-    if (curPage == 1) {
-        $ul.append('<li><a href="#page/' + curPage + '" class="prev disabled">&laquo</a></li>');
-    }
-    else {
-        $ul.append('<li><a href="#page/' + (curPage - 1) + '" class="prev">&laquo</a></li>');
-    }
-
-    for (var i = (temp - 1) * 5 + 1; i <= this.numberOfPages && i <= temp * 5; i++) {
-        if (i == curPage) {
-            $ul.append('<li> <a class="active" href="#page/' + i + '">' + i + '</a></li>');
-        }
-        else {
-            $ul.append('<li> <a href="#page/' + i + '">' + i + '</a></li>');
-        }
-    }
-
-    if (curPage == this.numberOfPages) {
-        $ul.append('<li><a href="#page/' + curPage + '" class="next disabled">&raquo</a></li>');
-    }
-    else {
-        $ul.append('<li><a href="#page/' + (+curPage + 1) + '" class="next">&raquo</a></li>');
+        this.updateUI();
     }
 };
 
@@ -74,16 +42,32 @@ App.prototype.render = function() {
             self.listNewsState(1)
         },
         '#page': function() {
-            self.listNewsState(temp[1])
+            var pageNumber = +temp[1];
+            if(pageNumber > 0 && (pageNumber <= self.numberOfPages || self.numberOfPages==1)) {
+                self.listNewsState(pageNumber);
+            }
+            else {
+                //renderErrorPage();
+            }
         },
         '#news': function() {
-            self.newsMessageState(temp[1])
+            if(+temp[1]) {
+                self.newsMessageState(+temp[1]);
+            }
+            else {
+                //renderErrorPage();
+            }
         },
         '#addNews': function() {
             self.addNewsState()
         },
         '#editNews': function() {
-            self.editNewsState(temp[1])
+            if(+temp[1]) {
+                self.editNewsState(+temp[1]);
+            }
+            else {
+                //renderErrorPage();
+            }
         }
     };
     if(map[temp[0]]){
@@ -98,6 +82,57 @@ App.prototype.back = function() {
     window.history.back();
 };
 
-App.prototype.floatingFunctions = function(e) {
+App.prototype.resize = function() {
+    $(this).height(0);
+    $(this).height(this.scrollHeight);
+};
 
-}
+App.prototype.submitChanges = function(e) {
+
+    var title = $('.title textarea').val().trim(),
+        shortDescription = $('.shortDescription textarea').val().trim(),
+        fullDescription = $('.fullDescription textarea').val().trim();
+
+    if(title && shortDescription && fullDescription) {
+        e.preventDefault();
+        var url = window.location.hash;
+        var temp = url.split('/');
+        var data = {
+            title: title,
+            shortDescription: shortDescription,
+            body: fullDescription
+        };
+        if (temp[0]=="#addNews") {
+            this.httpService.addNews(data, function(data) {
+                window.location.hash = "#news/" + data.newsId;
+            })
+        } else {
+            this.httpService.changeNews(temp[1], data, function() {
+                window.location.hash = "#news/" + temp[1];
+            })
+        }
+    }
+    else {
+        $('.title textarea').val(title);
+        $('.shortDescription textarea').val(shortDescription);
+        $('.fullDescription textarea').val(fullDescription);
+    }
+
+};
+
+App.prototype.updateUI = function() {
+    var self = this;
+    $('[data-translation]').each(function(index, val) {
+        $(val).text(self.userLang[$(val).data("translation")]);
+    });
+};
+
+App.prototype.drawPagination = function(curPage) {
+    var temp = Math.ceil(curPage / 5);
+    $("main").append(this.templateParser("pagination", {
+        curPage: curPage,
+        startPage: (temp - 1) * 5 + 1,
+        numberOfPages: this.numberOfPages,
+        lastPage: temp * 5
+    }));
+};
