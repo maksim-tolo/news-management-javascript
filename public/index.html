@@ -27,6 +27,7 @@
                     <p data-translation="modalBody"></p>
                 </div>
                 <div class="modal-footer">
+                    <label class="cancel" for="deleteNewsModal" data-translation="cancel"></label>
                     <label class="confirmDeletingNews" for="deleteNewsModal" data-translation="delete" data-news-id=""></label>
                 </div>
             </div>
@@ -46,7 +47,10 @@
     <script type="text/html" id="listNewsTemplate">
         <% for (var i = 0; i < newsList.length; i++) { %>
             <div>
-                <h1><%=newsList[i].title%></h1>
+                <div class="clearfix newsTitle">
+                    <h1><%=newsList[i].title%></h1>
+                    <div class="date"><%=newsList[i].modificationDate%></div>
+                </div>
                 <p><%=newsList[i].shortDescription%></p>
                 <div class="clearfix">
                     <button class="view">

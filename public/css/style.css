@@ -139,7 +139,7 @@ main textarea:focus ~ label, main textarea:valid ~ label     {
 .submit {
     background-color: #009688;
     color: rgba(255,255,255,.84);
-    padding: 8px 30px;
+    padding: 8px 15px;
     border: 0;
     margin: 10px;
     border-radius: 2px;
@@ -150,6 +150,22 @@ main textarea:focus ~ label, main textarea:valid ~ label     {
     font-weight: 400;
     position: relative;
     float: right;
+}
+.cancel {
+    padding: 8px 15px;
+    border: 0;
+    margin: 0;
+    cursor: pointer;
+    position: relative;
+    outline: none;
+    font-size: 14px;
+    font-weight: 400;
+    text-transform: uppercase;
+}
+.cancel:hover {
+    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+    -webkit-box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+    -moz-box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
 }
 .view, .edit, .delete {
     position: relative;
@@ -166,7 +182,7 @@ main textarea:focus ~ label, main textarea:valid ~ label     {
     cursor: pointer;
     margin: 0;
     border-radius: 2px;
-    padding: 8px 30px;
+    padding: 8px 15px;
     background-color: #009688;
     color: rgba(255,255,255,.84);
     text-decoration: none;
@@ -331,16 +347,17 @@ main textarea:focus ~ label, main textarea:valid ~ label     {
 }
 
 .modal .btn-close {
-    color: #aaa;
+    color: #c1c1c1;
     cursor: pointer;
-    font-size: 30px;
+    font-size: 21px;
     text-decoration: none;
+    font-weight: 500;
     position: absolute;
-    right: 5px;
-    top: 0;
+    right: 20px;
+    top: 15px;
 }
 .modal .btn-close:hover {
-    color: red;
+    color: #6e6e6e;
 }
 .modal-wrap:before {
     content: "";
@@ -376,15 +393,15 @@ main textarea:focus ~ label, main textarea:valid ~ label     {
 .modal-dialog {
     background: #fefefe;
     border: none;
-    border-radius: 5px;
+    border-radius: 2px;
     position: fixed;
     width: 80%;
     max-width: 500px;
     left: 50%;
     top: -100%;
-    -webkit-box-shadow: 0 15px 20px rgba(0,0,0,.22),0 19px 60px rgba(0,0,0,.3);
-    -moz-box-shadow: 0 15px 20px rgba(0,0,0,.22),0 19px 60px rgba(0,0,0,.3);
-    box-shadow: 0 15px 20px rgba(0,0,0,.22),0 19px 60px rgba(0,0,0,.3);
+    -webkit-box-shadow: rgba(0, 0, 0, 0.2) 0 27px 24px 0, rgba(0, 0, 0, 0.219608) 0 40px 77px 0;
+    -moz-box-shadow: rgba(0, 0, 0, 0.2) 0 27px 24px 0, rgba(0, 0, 0, 0.219608) 0 40px 77px 0;
+    box-shadow: rgba(0, 0, 0, 0.2) 0 27px 24px 0, rgba(0, 0, 0, 0.219608) 0 40px 77px 0;
     -webkit-transform: translate(-50%, -500%);
     -ms-transform: translate(-50%, -500%);
     -o-transform: translate(-50%, -500%);
@@ -396,43 +413,43 @@ main textarea:focus ~ label, main textarea:valid ~ label     {
     z-index: 103;
 }
 .modal-body {
-    padding: 20px;
+    padding: 5px 24px 16px 24px;
 }
 .modal-body p {
+    font-size: 14px;
     margin: 0;
 }
-.modal-header,
-.modal-footer {
-    padding: 20px 20px;
-}
 .modal-header {
-    border-bottom: #eaeaea solid 1px;
+    padding: 24px 24px 0 24px;
 }
 .modal-header h2 {
     color: #555;
-    font-size: 20px;
+    font-size: 18px;
     font-weight: normal;
     line-height: 1;
     margin: 0;
 }
 .modal-footer {
-    border-top: #eaeaea solid 1px;
+    padding: 15px 0;
     text-align: right;
 }
 .confirmDeletingNews {
-    border-radius: 3px;
-    cursor: pointer;
-    display: inline-block;
-    font-size: 14px;
+    background-color: #009688;
+    color: rgba(255,255,255,.84);
     padding: 8px 15px;
-    text-decoration: none;
-    text-align: center;
-    min-width: 60px;
+    border: 0;
+    margin: 10px;
+    border-radius: 2px;
+    text-transform: uppercase;
+    cursor: pointer;
+    outline: none;
+    font-size: 14px;
+    font-weight: 400;
     position: relative;
-    background: #428bca;
-    border-color: #357ebd;
-    color: #fff;
 }
-.confirmDeletingNews:hover, .confirmDeletingNews:focus {
-    background: #66A1D3;
+.date {
+    float: right;
+}
+.newsTitle h1{
+    float: left;
 }

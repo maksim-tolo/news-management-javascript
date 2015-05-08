@@ -127,5 +127,9 @@ App.prototype.editNewsState = function(id) {
 
         self.updateUI();
 
+        $('textarea').each(function(index, val) {
+            self.resize.call(val);
+        });
+
     });
 };

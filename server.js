@@ -1,13 +1,14 @@
 var express = require('express');
 var app = express();
-
 var morgan = require('morgan');
 var bodyParser = require('body-parser');
-var cookieParser = require('cookie-parser');
 var mysql = require('mysql');
 var port = process.env.PORT || 3000;
 var database = require('./config/database');
 var pool = mysql.createPool(database.url);
+var mySQLService = require('./services/mySQLService')(pool);
+var controller = require('./controllers/controller')(mySQLService);
+
 pool.getConnection(function(err, connection) {
     if (err) {
         console.error('error connecting: ' + err.stack);
@@ -20,17 +21,16 @@ pool.getConnection(function(err, connection) {
 });
 
 app.use(express.static(__dirname + '/public'));
+
 if (app.get('env') === 'development') {
     app.use(morgan('dev'));
 } else {
     app.use(morgan('combined'));
 }
-app.use(cookieParser());
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-var mySQLService = require('./services/mySQLService')(pool);
-var controller = require('./controllers/controller')(mySQLService);
 require('./routes/routes.js')(app, controller);
 
 app.use(function(req, res, next) {
@@ -39,18 +39,13 @@ app.use(function(req, res, next) {
     next(err);
 });
 
-if (app.get('env') === 'development') {
-    app.use(function (err, req, res, next) {
-        console.log(err);
-        res.status(err.status || 500).send(err.message);
-    });
-} else {
-    app.use(function (err, req, res, next) {
-        console.log(err);
-        res.status(err.status || 500).end();
-    });
-}
 
-app.listen(port);
-console.log("App listening on port " + port);
+app.use(function (err, req, res, next) {
+    console.log(err);
+    res.status(err.status || 500).end();
+});
+
+app.listen(port, function() {
+    console.log("App listening on port " + port);
+});
 

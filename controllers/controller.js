@@ -6,13 +6,11 @@ module.exports = function (dataService) {
         return next(err);
     }
 
-    function validation() {
-
-    }
+    var valid = require('./validate');
 
     return {
         getNewsList: function (req, res, next) {
-            if (req.query.from >= 0 && req.query.limit >= 0) {
+            if (valid({validLimitAndFrom: req.query})) {
                 dataService.getNewsList(+req.query.from, +req.query.limit, function(newsList) {
                     (newsList && newsList.err) ? next(newsList.err): dataService.getNumberOfNews(function(numberOfNews) {
                         (numberOfNews && numberOfNews.err) ? next(numberOfNews.err): res.send({newsList: newsList, numberOfNews: numberOfNews});
@@ -23,7 +21,7 @@ module.exports = function (dataService) {
             }
         },
         getNewsById: function (req, res, next) {
-             if(req.params.id > 0) {
+             if(valid({validId: req.params})) {
                  dataService.getNewsById(req.params.id, function(data) {
                      (data && data.err) ? next(data.err): res.send(data);
                  });
@@ -32,7 +30,7 @@ module.exports = function (dataService) {
              }
         },
         changeNews: function (req, res, next) {
-            if(req.params.id > 0 && Object.keys(req.body).length == 3 && req.body.title && req.body.title.length <= 30 && req.body.shortDescription && req.body.shortDescription.length <= 255 && req.body.body) {
+            if(valid({validId: req.params, validNewsData: req.body})) {
                 dataService.changeNews(req.params.id, req.body, function(data) {
                     (data && data.err) ? next(data.err): res.end();
                 });
@@ -41,7 +39,7 @@ module.exports = function (dataService) {
             }
         },
         addNews: function (req, res, next) {
-            if(Object.keys(req.body).length == 3 && req.body.title && req.body.title.length <= 30 && req.body.shortDescription && req.body.shortDescription.length <= 255 && req.body.body) {
+            if(valid({validNewsData: req.body})) {
                 dataService.addNews(req.body, function (data) {
                     (data && data.err) ? next(data.err): dataService.getLastInsertId(function (newsId) {
                         (newsId && newsId.err) ? next(newsId.err): res.send(newsId);
@@ -52,7 +50,7 @@ module.exports = function (dataService) {
             }
         },
         deleteNews: function (req, res, next) {
-            if(req.params.id > 0) {
+            if(valid({validId: req.params})) {
                 dataService.deleteNews(req.params.id, function (data) {
                     (data && data.err) ? next(data.err): res.end();
                 });
