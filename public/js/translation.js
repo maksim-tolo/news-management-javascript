@@ -13,7 +13,8 @@ App.prototype.LANG = {
         fullDescription: "Полное описание:",
         save: "Сохранить",
         cancel: "Отмена",
-        modalBody: "Вы действительно хотите удалить эту новость?"
+        modalBody: "Вы действительно хотите удалить эту новость?",
+        deleting: "Удаление"
     },
     en: {
         addNews: "Add News",
@@ -29,6 +30,7 @@ App.prototype.LANG = {
         fullDescription: "Full description:",
         save: "Save",
         cancel: "Cancel",
-        modalBody: "Are you sure to delete this news article?"
+        modalBody: "Are you sure to delete this news article?",
+        deleting: "Deleting"
     }
 };

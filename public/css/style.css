@@ -1,7 +1,7 @@
 body {
     background: #eee;
 }
-body, h1, h2, h3, h4, h5, h6 {
+body, h1, h2, h3, h4, h5, h6, textarea {
     font-family: RobotoDraft,Roboto,Helvetica Neue,Helvetica,Arial,sans-serif;
     font-weight: 300;
 }
@@ -121,7 +121,7 @@ main textarea:focus {
     border-bottom: 1px solid #26a69a;
     box-shadow: 0 1px 0 0 #26a69a;
 }
-main label {
+main form label {
     color:#999;
     font-size:18px;
     font-weight:normal;
@@ -162,7 +162,9 @@ main textarea:focus ~ label, main textarea:valid ~ label     {
     font-weight: 400;
     float: right;
 }
-.view a, .edit a, .delete a {
+.view a, .edit a, .delete label {
+    cursor: pointer;
+    margin: 0;
     border-radius: 2px;
     padding: 8px 30px;
     background-color: #009688;
@@ -170,7 +172,7 @@ main textarea:focus ~ label, main textarea:valid ~ label     {
     text-decoration: none;
     display: block;
 }
-.view a:hover, .edit a:hover, .delete a:hover {
+.view a:hover, .edit a:hover, .delete label:hover {
     background-color: #00a496;
 }
 .submit:hover {
@@ -326,4 +328,111 @@ main textarea:focus ~ label, main textarea:valid ~ label     {
     content: ' ';
     display: table;
     clear: both;
+}
+
+.modal .btn-close {
+    color: #aaa;
+    cursor: pointer;
+    font-size: 30px;
+    text-decoration: none;
+    position: absolute;
+    right: 5px;
+    top: 0;
+}
+.modal .btn-close:hover {
+    color: red;
+}
+.modal-wrap:before {
+    content: "";
+    display: none;
+    background: rgba(0, 0, 0, .3);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 101;
+}
+.modal-overlay {
+    bottom: 0;
+    display: none;
+    left: 0;
+    position: fixed;
+    right: 0;
+    top: 0;
+    z-index: 102;
+}
+.modal-open:checked ~ .modal-wrap:before,
+.modal-open:checked ~ .modal-wrap .modal-overlay {
+    display: block;
+}
+.modal-open:checked ~ .modal-wrap .modal-dialog {
+    -webkit-transform: translate(-50%, 0);
+    -ms-transform: translate(-50%, 0);
+    -o-transform: translate(-50%, 0);
+    transform: translate(-50%, 0);
+    top: 20%;
+}
+.modal-dialog {
+    background: #fefefe;
+    border: none;
+    border-radius: 5px;
+    position: fixed;
+    width: 80%;
+    max-width: 500px;
+    left: 50%;
+    top: -100%;
+    -webkit-box-shadow: 0 15px 20px rgba(0,0,0,.22),0 19px 60px rgba(0,0,0,.3);
+    -moz-box-shadow: 0 15px 20px rgba(0,0,0,.22),0 19px 60px rgba(0,0,0,.3);
+    box-shadow: 0 15px 20px rgba(0,0,0,.22),0 19px 60px rgba(0,0,0,.3);
+    -webkit-transform: translate(-50%, -500%);
+    -ms-transform: translate(-50%, -500%);
+    -o-transform: translate(-50%, -500%);
+    transform: translate(-50%, -500%);
+    -webkit-transition: -webkit-transform 0.4s ease-out;
+    -moz-transition: -moz-transform 0.4s ease-out;
+    -o-transition: -o-transform 0.4s ease-out;
+    transition: transform 0.4s ease-out;
+    z-index: 103;
+}
+.modal-body {
+    padding: 20px;
+}
+.modal-body p {
+    margin: 0;
+}
+.modal-header,
+.modal-footer {
+    padding: 20px 20px;
+}
+.modal-header {
+    border-bottom: #eaeaea solid 1px;
+}
+.modal-header h2 {
+    color: #555;
+    font-size: 20px;
+    font-weight: normal;
+    line-height: 1;
+    margin: 0;
+}
+.modal-footer {
+    border-top: #eaeaea solid 1px;
+    text-align: right;
+}
+.confirmDeletingNews {
+    border-radius: 3px;
+    cursor: pointer;
+    display: inline-block;
+    font-size: 14px;
+    padding: 8px 15px;
+    text-decoration: none;
+    text-align: center;
+    min-width: 60px;
+    position: relative;
+    background: #428bca;
+    border-color: #357ebd;
+    color: #fff;
+}
+.confirmDeletingNews:hover, .confirmDeletingNews:focus {
+    background: #66A1D3;
 }

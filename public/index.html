@@ -8,13 +8,40 @@
     <script src="bower_components/jquery/dist/jquery.min.js"></script>
     <script src="js/app.js"></script>
     <script src="js/translation.js"></script>
-    <script src="js/eventsListeners.js"></script>
     <script src="js/ripple.js"></script>
     <script src="js/httpService.js"></script>
     <script src="js/states.js"></script>
     <script src="js/templateParser.js"></script>
 </head>
 <body>
+    <div class="modal">
+        <input class="modal-open" id="deleteNewsModal" type="checkbox" hidden>
+        <div class="modal-wrap" aria-hidden="true" role="dialog">
+            <label class="modal-overlay" for="deleteNewsModal"></label>
+            <div class="modal-dialog">
+                <div class="modal-header">
+                    <h2 data-translation="deleting"> </h2>
+                    <label class="btn-close" for="deleteNewsModal" aria-hidden="true">×</label>
+                </div>
+                <div class="modal-body">
+                    <p data-translation="modalBody"></p>
+                </div>
+                <div class="modal-footer">
+                    <label class="confirmDeletingNews" for="deleteNewsModal" data-translation="delete" data-news-id=""></label>
+                </div>
+            </div>
+        </div>
+    </div>
+    <header>
+        <div tabindex="0" class="ripple icon-language"></div>
+        <ul class="langMenu">
+            <li data-lang="en">English</li>
+            <li data-lang="ru">Русский</li>
+        </ul>
+    </header>
+    <aside></aside>
+    <main></main>
+    <footer>News Management (c) 2015</footer>
 
     <script type="text/html" id="listNewsTemplate">
         <% for (var i = 0; i < newsList.length; i++) { %>
@@ -29,7 +56,7 @@
                         <a href="#editNews/<%=newsList[i].id%>" data-translation="edit"></a>
                     </button>
                     <button class="delete">
-                        <a href="#news/<%=newsList[i].id%>" data-translation="delete"></a>
+                        <label for="deleteNewsModal" data-id="<%=newsList[i].id%>" data-translation="delete"></label>
                     </button>
                 </div>
             </div>
@@ -38,9 +65,21 @@
 
     <script type="text/html" id="asideButtonsTemplate">
         <% for (var i = 0; i < floating.length; i++) { %>
-            <a href="<%=floating[i].href%>" class="floating <%=floating[i].class%> ripple">
-                <p data-translation="<%=floating[i].dataAttr%>"></p>
-            </a>
+            <% if (floating[i].href) { %>
+                <a href="<%=floating[i].href%>" class="floating <%=floating[i].class%> ripple">
+                    <p data-translation="<%=floating[i].dataAttr%>"></p>
+                </a>
+            <% } else {%>
+                <% if (floating[i].id) { %>
+                    <label for="deleteNewsModal" class="floating <%=floating[i].class%> ripple" data-id="<%=floating[i].id%>">
+                        <p data-translation="<%=floating[i].dataAttr%>"></p>
+                    </label>
+                <% } else { %>
+                    <label for="deleteNewsModal" class="floating <%=floating[i].class%> ripple">
+                        <p data-translation="<%=floating[i].dataAttr%>"></p>
+                    </label>
+                <% } %>
+            <% } %>
         <% } %>
     </script>
 
@@ -104,15 +143,5 @@
         </ul>
     </script>
 
-    <header>
-        <div tabindex="0" class="ripple icon-language"></div>
-        <ul class="langMenu">
-            <li data-lang="en">English</li>
-            <li data-lang="ru">Русский</li>
-        </ul>
-    </header>
-    <aside></aside>
-    <main></main>
-    <footer>News Management (c) 2015</footer>
 </body>
 </html>

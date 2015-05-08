@@ -36,9 +36,10 @@ App.prototype.newsMessageState = function(id) {
                 dataAttr: "addNews"
             },
             {
-                href: "#addNews",
+                href: "",
                 class: "icon-delete",
-                dataAttr: "deleteNews"
+                dataAttr: "deleteNews",
+                id: id
             },
             {
                 href: "#editNews/" + id,
@@ -48,7 +49,13 @@ App.prototype.newsMessageState = function(id) {
         ]}));
 
         if (!$(".backButton").length) {
-            $("header").append('<div class="floating icon-arrow-back ripple backButton"><p>'+self.userLang.back+'</p></div>');
+            $("header").append(self.templateParser("asideButtonsTemplate", {floating: [
+                {
+                    href: "",
+                    class: "icon-arrow-back backButton",
+                    dataAttr: "back"
+                }
+            ]}));
         }
 
         self.updateUI();
@@ -74,7 +81,13 @@ App.prototype.addNewsState = function() {
     ]}));
 
     if (!$(".backButton").length) {
-        $("header").append('<div class="floating icon-arrow-back ripple backButton"><p>'+this.userLang.back+'</p></div>');
+        $("header").append(this.templateParser("asideButtonsTemplate", {floating: [
+            {
+                href: "",
+                class: "icon-arrow-back backButton",
+                dataAttr: "back"
+            }
+        ]}));
     }
 
     this.updateUI();
@@ -95,14 +108,21 @@ App.prototype.editNewsState = function(id) {
                 dataAttr: "listNews"
             },
             {
-                href: "#addNews",
+                href: "",
                 class: "icon-delete",
-                dataAttr: "deleteNews"
+                dataAttr: "deleteNews",
+                id: id
             }
         ]}));
 
         if (!$(".backButton").length) {
-            $("header").append('<div class="floating icon-arrow-back ripple backButton"><p>'+self.userLang.back+'</p></div>');
+            $("header").append(self.templateParser("asideButtonsTemplate", {floating: [
+                {
+                    href: "",
+                    class: "icon-arrow-back backButton",
+                    dataAttr: "back"
+                }
+            ]}));
         }
 
         self.updateUI();

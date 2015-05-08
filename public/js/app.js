@@ -33,6 +33,7 @@ App.prototype.changeLang = function(e) {
 App.prototype.render = function() {
     var self = this;
     var url = window.location.hash;
+    $('#deleteNewsModal').prop('checked', false);
     var temp = url.split('/');
     var map = {
         '': function() {
@@ -135,4 +136,34 @@ App.prototype.drawPagination = function(curPage) {
         numberOfPages: this.numberOfPages,
         lastPage: temp * 5
     }));
+};
+
+App.prototype.eventsListeners = function() {
+
+    $('.langMenu').on('click', 'li', $.proxy(this.changeLang, this));
+
+    $('body').on('click', '.ripple', this.ripple)
+             .on('keyup', 'textarea', this.resize)
+             .on('click', '.submit', $.proxy(this.submitChanges, this))
+             .on('click', '.icon-delete, .delete', $.proxy(this.addDataAttr, this));
+
+    $(window).on('hashchange', $.proxy(this.render, this));
+
+    $('.confirmDeletingNews').on('click', $.proxy(this.deleteNews, this));
+
+    $('header').on('click', '.backButton', this.back);
+
+};
+
+App.prototype.deleteNews = function() {
+    var self = this;
+    var id =$('[data-news-id]')[0].dataset.newsId;
+    this.httpService.deleteNews(id, function() {
+        if (window.location.hash.split('/')[0] == "#page") self.render();
+        else window.location.hash = "#page/1";
+    });
+};
+
+App.prototype.addDataAttr = function(e) {
+    $('.confirmDeletingNews')[0].dataset.newsId = $(e.target).data('id');
 };
