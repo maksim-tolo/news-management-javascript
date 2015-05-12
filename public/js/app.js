@@ -4,34 +4,34 @@ $(function () {
 
 });
 
-function App() {
+function App() { //app constructor
     this.templateCache = {};
     this.numberOfPages = 1;
     this.userLang = this.LANG.en;
     this.ignoreNextEvent = false;
 }
 
-App.prototype.init = function () {
+App.prototype.init = function () { //init app
     this.defineLang();
     this.eventsListeners();
     this.render();
 };
 
-App.prototype.defineLang = function () {
+App.prototype.defineLang = function () { //define language by local storage value or browser language
     var lang = localStorage.getItem("userLang");
     this.userLang = this.LANG[lang] || this.LANG[navigator.language] || this.LANG.en;
 };
 
-App.prototype.changeLang = function (e) {
+App.prototype.changeLang = function (e) { //change current language
     var lang = $(e.target).data("lang");
     if (lang) {
         localStorage.setItem("userLang", lang);
         this.userLang = this.LANG[lang];
-        this.updateUI();
+        this.updateUI(); //update language of interface
     }
 };
 
-App.prototype.render = function () {
+App.prototype.render = function () { //render templates according to hash
     
     var self = this,
         url = window.location.hash,
@@ -76,16 +76,16 @@ App.prototype.render = function () {
         return;
     }
 
-    $('#deleteNewsModal').prop('checked', false);
-    exitWithoutSavingModal.prop('checked', false);
+    $('#deleteNewsModal').prop('checked', false); //hide "deleteNewsModal"
+    exitWithoutSavingModal.prop('checked', false);  //hide "exitWithoutSavingModal"
 
     if (this.curState == '#addNews' && $('.title textarea').val() && ($('.title textarea').val().trim() || $('.shortDescription textarea').val().trim() || $('.fullDescription textarea').val().trim())) { //show warning if adding news form is not blank and not saved
-        return showWarning();
-    } else if (this.curState && this.curState.split('/')[0] == '#editNews' && this.currentChangingNews && $('.title textarea').val() && ($('.title textarea').val().trim() != this.currentChangingNews.title || $('.shortDescription textarea').val().trim() != this.currentChangingNews.shortDescription || $('.fullDescription textarea').val().trim() != this.currentChangingNews.body)) { //show warning if editing news form is not blank and not saved
-        return showWarning();
+        return showWarning(); //show warning modal
+    } else if (this.curState && this.curState.split('/')[0] == '#editNews' && this.currentChangingNews && $('.title textarea').val() && ($('.title textarea').val().trim() != this.currentChangingNews.title || $('.shortDescription textarea').val().trim() != this.currentChangingNews.shortDescription || $('.fullDescription textarea').val().trim() != this.currentChangingNews.body)) { //show warning if editing news form is changed and not saved
+        return showWarning(); //show warning modal
     }
 
-    if (map[temp[0]]) {
+    if (map[temp[0]]) { //change state
         this.curState = url;
         map[temp[0]]();
     } else {
@@ -93,7 +93,7 @@ App.prototype.render = function () {
         this.errorState(404);
     }
 
-    function showWarning() {
+    function showWarning() { //show warning modal
         self.lastState = url;
         self.ignoreNextEvent = self;
         exitWithoutSavingModal.prop('checked', true);
@@ -106,12 +106,12 @@ App.prototype.back = function () {
     window.history.back();
 };
 
-App.prototype.resize = function () {
+App.prototype.resize = function () { //resize textarea according to text height
     $(this).height(0);
     $(this).height(this.scrollHeight);
 };
 
-App.prototype.submitChanges = function (e) {
+App.prototype.submitChanges = function (e) { //save or update news message
 
     var title = $('.title textarea'),
         shortDescription = $('.shortDescription textarea'),
@@ -120,8 +120,8 @@ App.prototype.submitChanges = function (e) {
         shortDescriptionTrimmed = shortDescription.val().trim(),
         fullDescriptionTrimmed = fullDescription.val().trim();
 
-    if (titleTrimmed && shortDescriptionTrimmed && fullDescriptionTrimmed) {
-        e.preventDefault();
+    if (titleTrimmed && shortDescriptionTrimmed && fullDescriptionTrimmed) { //if all fields not empty
+        e.preventDefault(); //don't refresh the page
         var url = window.location.hash,
             self = this,
             temp = url.split('/'),
@@ -130,20 +130,20 @@ App.prototype.submitChanges = function (e) {
                 shortDescription: shortDescriptionTrimmed,
                 body: fullDescriptionTrimmed
             };
-        if (temp[0] === "#addNews") {
+        if (temp[0] === "#addNews") { //if add news message
             this.httpService.addNews(data, function (data) {
-                self.curState = window.location.hash = "#news/" + data.newsId;
+                self.curState = window.location.hash = "#news/" + data.newsId; //go to news message state
             }, function (jqXHR) {
-                self.errorState(jqXHR.status);
+                self.errorState(jqXHR.status); //if error go to error state
             });
-        } else {
+        } else { //if edit news message
             this.httpService.changeNews(temp[1], data, function () {
-                self.curState = window.location.hash = "#news/" + temp[1];
+                self.curState = window.location.hash = "#news/" + temp[1]; //go to news message state
             }, function (jqXHR) {
-                self.errorState(jqXHR.status);
+                self.errorState(jqXHR.status); //if error go to error state
             });
         }
-    } else {
+    } else { //will showed build-in warning if one of fields is empty
         title.val(titleTrimmed);
         shortDescription.val(shortDescriptionTrimmed);
         fullDescription.val(fullDescriptionTrimmed);
@@ -151,16 +151,16 @@ App.prototype.submitChanges = function (e) {
 
 };
 
-App.prototype.updateUI = function () {
+App.prototype.updateUI = function () { //update language of interface
     var self = this;
     $('[data-translation]').each(function (index, val) {
         $(val).text(self.userLang[$(val).data("translation")]);
     });
 };
 
-App.prototype.drawPagination = function (curPage) {
+App.prototype.drawPagination = function (curPage) { //draw pagination on newsList state
     var temp = Math.ceil(curPage / 5);
-    $("main").append(this.templateParser("pagination", {
+    $("main").append(this.templateParser("pagination", { //parse pagination template
         curPage: curPage,
         startPage: (temp - 1) * 5 + 1,
         numberOfPages: this.numberOfPages,
@@ -187,25 +187,25 @@ App.prototype.eventsListeners = function () {
 
 };
 
-App.prototype.deleteNews = function () {
+App.prototype.deleteNews = function () { //delete news message
     var self = this,
         id = $('[data-news-id]')[0].dataset.newsId;
-    this.httpService.deleteNews(id, function () {
+    this.httpService.deleteNews(id, function () { //go to newsList state
         if (window.location.hash.split('/')[0] === "#page") {
             self.render();
         } else {
             window.location.hash = "#page/1";
         }
     }, function (jqXHR) {
-        self.errorState(jqXHR.status);
+        self.errorState(jqXHR.status); //if error go to error state
     });
 };
 
 App.prototype.addDataAttr = function (e) {
-    $('.confirmDeletingNews')[0].dataset.newsId = $(e.target).data('id');
+    $('.confirmDeletingNews')[0].dataset.newsId = $(e.target).data('id'); //add deleting news id to "confirm deleting news" button
 };
 
-App.prototype.newsDateFormatting = function () {
+App.prototype.newsDateFormatting = function () { //formatting news date
 
     function dateFormatting(str) {
         var curDate = new Date(str),
@@ -217,7 +217,7 @@ App.prototype.newsDateFormatting = function () {
         return addZero(date) + '-' + addZero(month) + '-' + year + ' ' + addZero(hours) + ':' + addZero(minutes);
     }
 
-    function addZero(data) {
+    function addZero(data) { //add '0' before number if it less then 10
         if (data < 10) {
             data = '0' + data;
         }
@@ -231,7 +231,7 @@ App.prototype.newsDateFormatting = function () {
 
 };
 
-App.prototype.exitWithoutSaving = function () {
+App.prototype.exitWithoutSaving = function () { //confirm exit without saving
     this.curState = this.lastState;
     window.location.hash = this.lastState;
 };

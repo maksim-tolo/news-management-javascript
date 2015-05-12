@@ -1,4 +1,4 @@
-App.prototype.templateParser = function (str, data) {
+App.prototype.templateParser = function (str, data) { //parsing templates
     
     var fn = !/\W/.test(str) ?
         this.templateCache[str] = this.templateCache[str] ||

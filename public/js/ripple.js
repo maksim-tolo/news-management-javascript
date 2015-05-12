@@ -1,4 +1,4 @@
-App.prototype.ripple = function (e) {
+App.prototype.ripple = function (e) { //ripple function for material design
     var $div = $('<div>'),
         btnOffset = $(this).offset(),
         xPos = e.pageX - btnOffset.left,
