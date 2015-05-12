@@ -1,8 +1,8 @@
-App.prototype.templateParser = function(str, data) {
+App.prototype.templateParser = function (str, data) {
     
     var fn = !/\W/.test(str) ?
         this.templateCache[str] = this.templateCache[str] ||
-            this.templateParser($("#"+str).html()) :
+            this.templateParser($("#" + str).html()) :
 
         new Function("obj",
             "var p=[],print=function(){p.push.apply(p,arguments);};" +
@@ -19,5 +19,5 @@ App.prototype.templateParser = function(str, data) {
                 .split("\r").join("\\'")
             + "');}return p.join('');");
 
-    return data ? fn( data ) : fn;
-}
+    return data ? fn(data) : fn;
+};

@@ -1,4 +1,4 @@
-module.exports = function(app, controller) {
+module.exports = function (app, controller) {
 
     app.get('/api/news', controller.getNewsList);
 

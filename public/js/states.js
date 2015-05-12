@@ -1,6 +1,16 @@
-App.prototype.listNewsState = function(pageNumber) {     //html в отдельные файлы
+App.prototype.listNewsState = function (pageNumber) {     //html в отдельные файлы
     var self = this;
-    this.httpService.getNewsList({from: (pageNumber-1)*10, limit: 10}, function(data) {
+    this.httpService.getNewsList({from: (pageNumber - 1) * 10, limit: 10}, function (data) {
+
+        if (!data.newsList.length) {
+            if (+pageNumber === 1) {
+                return self.errorState(418);
+            } else {
+                return self.errorState(404);
+            }
+        }
+
+        self.newsDateFormatting.call(data.newsList);
 
         $(".backButton").remove();
 
@@ -17,14 +27,22 @@ App.prototype.listNewsState = function(pageNumber) {     //html в отдель�
 
         self.updateUI();
 
-        self.numberOfPages = Math.ceil(data.numberOfNews/10);
+        self.numberOfPages = Math.ceil(data.numberOfNews / 10);
         self.drawPagination(pageNumber);
+    }, function (jqXHR) {
+        self.errorState(jqXHR.status);
     });
 };
 
-App.prototype.newsMessageState = function(id) {
+App.prototype.newsMessageState = function (id) {
     var self = this;
-    this.httpService.getNewsById(id, function(data) {
+    this.httpService.getNewsById(id, function (data) {
+
+        if (!data.length) {
+            return self.errorState(404);
+        }
+
+        self.newsDateFormatting.call(data);
 
         $("main").scrollTop(0)
                  .html(self.templateParser("newsMessageTemplate", data[0]));
@@ -60,17 +78,19 @@ App.prototype.newsMessageState = function(id) {
 
         self.updateUI();
 
+    }, function (jqXHR) {
+        self.errorState(jqXHR.status);
     });
 };
 
-App.prototype.addNewsState = function() {
+App.prototype.addNewsState = function () {
 
     $("main").scrollTop(0)
              .html(this.templateParser("addOrChangeNewsTemplate", {
-                    title: "",
-                    shortDescription: "",
-                    body: ""
-            }));
+            title: "",
+            shortDescription: "",
+            body: ""
+        }));
 
     $("aside").html(this.templateParser("asideButtonsTemplate", {floating: [
         {
@@ -94,9 +114,15 @@ App.prototype.addNewsState = function() {
 
 };
 
-App.prototype.editNewsState = function(id) {
+App.prototype.editNewsState = function (id) {
     var self = this;
-    this.httpService.getNewsById(id, function(data) {
+    this.httpService.getNewsById(id, function (data) {
+
+        if (!data.length) {
+            return self.errorState(404);
+        }
+
+        self.currentChangingNews = data[0];
 
         $("main").scrollTop(0)
             .html(self.templateParser("addOrChangeNewsTemplate", data[0]));
@@ -127,9 +153,63 @@ App.prototype.editNewsState = function(id) {
 
         self.updateUI();
 
-        $('textarea').each(function(index, val) {
+        $('textarea').each(function (index, val) {
             self.resize.call(val);
         });
 
+    }, function (jqXHR) {
+        self.errorState(jqXHR.status);
     });
+};
+
+App.prototype.errorState = function (err) {
+
+    var data = {},
+        map = {
+            "400": 'badRequest',
+            "404": 'notFound',
+            "418": 'emptyNewsList',
+            "500": 'internalError'
+        };
+
+    if (map[err]) {
+        data.status = err;
+        data.description = map[err];
+    } else {
+        data.status = err;
+        data.description = "";
+    }
+
+
+    $("main").scrollTop(0)
+             .html(this.templateParser("errorTemplate", data));
+
+    if (err != 418) {
+        $("aside").empty();
+
+        if (!$(".backButton").length) {
+            $("header").append(this.templateParser("asideButtonsTemplate", {
+                floating: [
+                    {
+                        href: "",
+                        class: "icon-arrow-back backButton",
+                        dataAttr: "back"
+                    }
+                ]
+            }));
+        }
+    } else {
+        $("aside").html(this.templateParser("asideButtonsTemplate", {floating: [
+            {
+                href: "#addNews",
+                class: "icon-add",
+                dataAttr: "addNews"
+            }
+        ]}));
+
+        $(".backButton").remove();
+    }
+
+    this.updateUI();
+
 };

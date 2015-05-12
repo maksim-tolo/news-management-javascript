@@ -14,7 +14,17 @@ App.prototype.LANG = {
         save: "Сохранить",
         cancel: "Отмена",
         modalBody: "Вы действительно хотите удалить эту новость?",
-        deleting: "Удаление"
+        modalBodyOnExit: "Вы действительно хотите покинуть эту страницу без сохранений?",
+        deleting: "Удаление",
+        exitWithoutSaving: "Выход без сохранения",
+        creationDate: "Создано:",
+        modificationDate: "Последнее изменение:",
+        leave: "Покинуть",
+        notFound: "Страница не найдена",
+        emptyNewsList: "Новости не найдены",
+        error: "Извините, произошла ошибка",
+        badRequest: "Плохой запрос",
+        internalError: "Внутренняя ошибка сервера"
     },
     en: {
         addNews: "Add News",
@@ -31,6 +41,16 @@ App.prototype.LANG = {
         save: "Save",
         cancel: "Cancel",
         modalBody: "Are you sure to delete this news article?",
-        deleting: "Deleting"
+        modalBodyOnExit: "Are you sure to leave this page without saving?",
+        deleting: "Deleting",
+        exitWithoutSaving: "Exit without saving",
+        creationDate: "Created:",
+        modificationDate: "Last modified:",
+        leave: "Leave",
+        notFound: "Page not found",
+        emptyNewsList: "News not found",
+        error: "Sorry, an error has occurred",
+        badRequest: "Bad request",
+        internalError: "Internal Server Error"
     }
 };

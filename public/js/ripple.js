@@ -1,5 +1,4 @@
-App.prototype.ripple = function(e) {
-    //e.preventDefault();
+App.prototype.ripple = function (e) {
     var $div = $('<div>'),
         btnOffset = $(this).offset(),
         xPos = e.pageX - btnOffset.left,
@@ -9,12 +8,12 @@ App.prototype.ripple = function(e) {
     $div.css({
         height: $(this).height(),
         width: $(this).height(),
-        top: yPos - ($div.height()/2),
-        left: xPos - ($div.width()/2),
+        top: yPos - ($div.height() / 2),
+        left: xPos - ($div.width() / 2),
         background: $(this).data("ripple-color")
     }).appendTo($(this));
 
-    window.setTimeout(function(){
+    window.setTimeout(function () {
         $div.remove();
     }, 2000);
 };

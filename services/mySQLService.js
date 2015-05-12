@@ -3,7 +3,6 @@ module.exports = function (pool) {
         getNumberOfNews: function (callback) {
             pool.getConnection(function(err, connection) {
                 if(err) {
-                    //throw new Error(err.message);
                     return callback({err: err});
                 }
                 var q = 'SELECT COUNT(*) FROM news';

@@ -1,46 +1,51 @@
 App.prototype.httpService = {
 
-    getNewsList: function (params, callback) {
+    getNewsList: function (params, success, error) {
         $.ajax({
             url: '/api/news',
             method: 'GET',
             traditional: true,
             data: params,
-            success: callback
+            success: success,
+            error: error
         });
     },
 
-    getNewsById: function (id, callback) {
+    getNewsById: function (id, success) {
         $.ajax({
             url: '/api/news/' + id,
             method: 'GET',
-            success: callback
+            success: success,
+            error: error
         });
     },
 
-    changeNews: function (id, newData, callback) {
+    changeNews: function (id, newData, success) {
         $.ajax({
             url: '/api/news/' + id,
             method: 'POST',
             data: newData,
-            success: callback
+            success: success,
+            error: error
         });
     },
 
-    addNews: function (newData, callback) {
+    addNews: function (newData, success) {
         $.ajax({
             url: '/api/news',
             method: 'PUT',
             data: newData,
-            success: callback
+            success: success,
+            error: error
         });
     },
 
-    deleteNews: function (id, callback) {
+    deleteNews: function (id, success) {
         $.ajax({
             url: '/api/news/' + id,
             method: 'DELETE',
-            success: callback
+            success: success,
+            error: error
         });
     }
 

@@ -33,7 +33,29 @@
             </div>
         </div>
     </div>
+    <div class="modal">
+        <input class="modal-open" id="exitWithoutSavingModal" type="checkbox" hidden>
+        <div class="modal-wrap" aria-hidden="true" role="dialog">
+            <label class="modal-overlay" for="exitWithoutSavingModal"></label>
+            <div class="modal-dialog">
+                <div class="modal-header">
+                    <h2 data-translation="exitWithoutSaving"> </h2>
+                    <label class="btn-close" for="exitWithoutSavingModal" aria-hidden="true">×</label>
+                </div>
+                <div class="modal-body">
+                    <p data-translation="modalBodyOnExit"></p>
+                </div>
+                <div class="modal-footer">
+                    <label class="cancel leave" for="exitWithoutSavingModal" data-translation="leave"></label>
+                    <button form="addOrUpdateNews">
+                        <label class="submit save" for="exitWithoutSavingModal" data-translation="save" data-news-id=""></label>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
     <header>
+        <a href="#page/1" class="icon-home"></a>
         <div tabindex="0" class="ripple icon-language"></div>
         <ul class="langMenu">
             <li data-lang="en">English</li>
@@ -49,17 +71,26 @@
             <div>
                 <div class="clearfix newsTitle">
                     <h1><%=newsList[i].title%></h1>
-                    <div class="date"><%=newsList[i].modificationDate%></div>
+                    <% if (newsList[i].modificationDate!=newsList[i].creationDate) { %>
+                    <div>
+                        <div data-translation="modificationDate"></div>
+                        <time><%=newsList[i].modificationDate%></time>
+                    </div>
+                    <% } %>
+                    <div>
+                        <div data-translation="creationDate"></div>
+                        <time><%=newsList[i].creationDate%></time>
+                    </div>
                 </div>
                 <p><%=newsList[i].shortDescription%></p>
                 <div class="clearfix">
-                    <button class="view">
+                    <button class="view ripple">
                         <a href="#news/<%=newsList[i].id%>" data-translation="view"></a>
                     </button>
-                    <button class="edit">
+                    <button class="edit ripple">
                         <a href="#editNews/<%=newsList[i].id%>" data-translation="edit"></a>
                     </button>
-                    <button class="delete">
+                    <button class="delete ripple">
                         <label for="deleteNewsModal" data-id="<%=newsList[i].id%>" data-translation="delete"></label>
                     </button>
                 </div>
@@ -88,15 +119,27 @@
     </script>
 
     <script type="text/html" id="newsMessageTemplate">
-        <div>
-            <h1><%=title%></h1>
+        <div class="newsMessage">
+            <div class="clearfix newsTitle">
+                <h1><%=title%></h1>
+                <% if (modificationDate!=creationDate) { %>
+                <div>
+                    <div data-translation="modificationDate"></div>
+                    <time><%=modificationDate%></time>
+                </div>
+                <% } %>
+                <div>
+                    <div data-translation="creationDate"></div>
+                    <time><%=creationDate%></time>
+                </div>
+            </div>
             <p><%=shortDescription%></p>
             <p><%=body%></p>
         </div>
     </script>
 
     <script type="text/html" id="addOrChangeNewsTemplate">
-        <form>
+        <form id="addOrUpdateNews">
             <div class="group title">
                 <textarea maxlength="30" required><%=title%></textarea>
                 <label data-translation="title"></label>
@@ -110,6 +153,9 @@
                 <label data-translation="fullDescription"></label>
             </div>
             <button class="submit ripple" data-translation="save"></button>
+            <button class="cancelSaving">
+                <a href="#page/1" data-translation="cancel"></a>
+            </button>
         </form>
     </script>
 
@@ -145,6 +191,14 @@
                 </li>
             <% } %>
         </ul>
+    </script>
+
+    <script type="text/html" id="errorTemplate">
+        <div class="error">
+            <h1><%=status%></h1>
+            <h2 data-translation="error"></h2>
+            <h3 data-translation="<%=description%>"></h3>
+        </div>
     </script>
 
 </body>

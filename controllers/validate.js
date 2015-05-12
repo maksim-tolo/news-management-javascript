@@ -1,13 +1,13 @@
-module.exports = function(data) {
+module.exports = function (data) {
     var map = {
-        "validLimitAndFrom": function() {
+        "validLimitAndFrom": function () {
             return this.from >= 0 && this.limit >= 0 ? true : false;
         },
-        "validId": function() {
+        "validId": function () {
             return this.id > 0 ? true : false;
         },
-        "validNewsData": function() {
-            return Object.keys(this).length == 3 && this.title && this.title.length <= 30 && this.shortDescription && this.shortDescription.length <= 255 && this.body ? true : false;
+        "validNewsData": function () {
+            return Object.keys(this).length === 3 && this.title && this.title.length <= 30 && this.shortDescription && this.shortDescription.length <= 255 && this.body ? true : false;
         }
     };
     for (var i in data) {
