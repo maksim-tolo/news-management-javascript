@@ -11,7 +11,7 @@ App.prototype.httpService = {
         });
     },
 
-    getNewsById: function (id, success) {
+    getNewsById: function (id, success, error) {
         $.ajax({
             url: '/api/news/' + id,
             method: 'GET',
@@ -20,7 +20,7 @@ App.prototype.httpService = {
         });
     },
 
-    changeNews: function (id, newData, success) {
+    changeNews: function (id, newData, success, error) {
         $.ajax({
             url: '/api/news/' + id,
             method: 'POST',
@@ -30,7 +30,7 @@ App.prototype.httpService = {
         });
     },
 
-    addNews: function (newData, success) {
+    addNews: function (newData, success, error) {
         $.ajax({
             url: '/api/news',
             method: 'PUT',
@@ -40,7 +40,7 @@ App.prototype.httpService = {
         });
     },
 
-    deleteNews: function (id, success) {
+    deleteNews: function (id, success, error) {
         $.ajax({
             url: '/api/news/' + id,
             method: 'DELETE',
