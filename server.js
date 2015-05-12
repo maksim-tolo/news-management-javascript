@@ -4,19 +4,20 @@ var morgan = require('morgan');
 var bodyParser = require('body-parser');
 var mysql = require('mysql');
 var port = process.env.PORT || 3000;
-var database = require('./config/database'); //config database
-var pool = mysql.createPool(database.url); //connection pool
-var mySQLService = require('./services/mySQLService')(pool); //DAO
-var controller = require('./controllers/controller')(mySQLService); //controller
+var database = require('./config/database');
+var pool = mysql.createPool(database.url);
+var mySQLService = require('./services/mySQLService')(pool);
+var controller = require('./controllers/controller')(mySQLService);
 
-pool.getConnection(function (err, connection) { //prepare table
+//prepare table
+pool.getConnection(function (err, connection) {
     if (err) {
         console.error('error connecting: ' + err.stack);
         return;
     }
 
-    require('./config/createTable')(connection); //create table 'news' if not exist
-    require('./config/addSomeNewsToTable')(connection); //add some news to table 'news'
+    require('./config/createTable')(connection);
+    require('./config/addSomeNewsToTable')(connection);
     connection.release();
 });
 
@@ -31,15 +32,17 @@ if (app.get('env') === 'development') {
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-require('./routes/routes.js')(app, controller); //routes
+require('./routes/routes.js')(app, controller);
 
-app.use(function (req, res, next) { //404 error handler
+//404 error handler
+app.use(function (req, res, next) {
     var err = new Error('Not Found');
     err.status = 404;
     next(err);
 });
 
-app.use(function (err, req, res, next) { //error handler
+//error handler
+app.use(function (err, req, res, next) {
     console.log(err);
     if (err.status == 404) {
         res.status(err.status).sendfile("./public/404.html");
@@ -51,4 +54,3 @@ app.use(function (err, req, res, next) { //error handler
 app.listen(port, function () {
     console.log("App listening on port " + port);
 });
-

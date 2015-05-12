@@ -4,34 +4,37 @@ $(function () {
 
 });
 
-function App() { //app constructor
+function App() {
     this.templateCache = {};
     this.numberOfPages = 1;
     this.userLang = this.LANG.en;
     this.ignoreNextEvent = false;
 }
 
-App.prototype.init = function () { //init app
+App.prototype.init = function () {
     this.defineLang();
     this.eventsListeners();
     this.render();
 };
 
-App.prototype.defineLang = function () { //define language by local storage value or browser language
+//define language by local storage value or browser language
+App.prototype.defineLang = function () {
     var lang = localStorage.getItem("userLang");
     this.userLang = this.LANG[lang] || this.LANG[navigator.language] || this.LANG.en;
 };
 
-App.prototype.changeLang = function (e) { //change current language
+//change current language
+App.prototype.changeLang = function (e) {
     var lang = $(e.target).data("lang");
     if (lang) {
         localStorage.setItem("userLang", lang);
         this.userLang = this.LANG[lang];
-        this.updateUI(); //update language of interface
+        this.updateUI();
     }
 };
 
-App.prototype.render = function () { //render templates according to hash
+//render templates according to hash
+App.prototype.render = function () {
     
     var self = this,
         url = window.location.hash,
@@ -76,16 +79,17 @@ App.prototype.render = function () { //render templates according to hash
         return;
     }
 
-    $('#deleteNewsModal').prop('checked', false); //hide "deleteNewsModal"
-    exitWithoutSavingModal.prop('checked', false);  //hide "exitWithoutSavingModal"
+    $('#deleteNewsModal').prop('checked', false);
+    exitWithoutSavingModal.prop('checked', false);
 
-    if (this.curState == '#addNews' && $('.title textarea').val() && ($('.title textarea').val().trim() || $('.shortDescription textarea').val().trim() || $('.fullDescription textarea').val().trim())) { //show warning if adding news form is not blank and not saved
-        return showWarning(); //show warning modal
-    } else if (this.curState && this.curState.split('/')[0] == '#editNews' && this.currentChangingNews && $('.title textarea').val() && ($('.title textarea').val().trim() != this.currentChangingNews.title || $('.shortDescription textarea').val().trim() != this.currentChangingNews.shortDescription || $('.fullDescription textarea').val().trim() != this.currentChangingNews.body)) { //show warning if editing news form is changed and not saved
-        return showWarning(); //show warning modal
+    //show warning if adding news form is not blank and not saved
+    if (this.curState == '#addNews' && $('.title textarea').val() && ($('.title textarea').val().trim() || $('.shortDescription textarea').val().trim() || $('.fullDescription textarea').val().trim())) {
+        return showWarning();
+    } else if (this.curState && this.curState.split('/')[0] == '#editNews' && this.currentChangingNews && $('.title textarea').val() && ($('.title textarea').val().trim() != this.currentChangingNews.title || $('.shortDescription textarea').val().trim() != this.currentChangingNews.shortDescription || $('.fullDescription textarea').val().trim() != this.currentChangingNews.body)) {
+        return showWarning();
     }
 
-    if (map[temp[0]]) { //change state
+    if (map[temp[0]]) {
         this.curState = url;
         map[temp[0]]();
     } else {
@@ -93,7 +97,7 @@ App.prototype.render = function () { //render templates according to hash
         this.errorState(404);
     }
 
-    function showWarning() { //show warning modal
+    function showWarning() {
         self.lastState = url;
         self.ignoreNextEvent = self;
         exitWithoutSavingModal.prop('checked', true);
@@ -106,22 +110,33 @@ App.prototype.back = function () {
     window.history.back();
 };
 
-App.prototype.resize = function () { //resize textarea according to text height
+//resize textarea according to text height
+App.prototype.resize = function () {
     $(this).height(0);
     $(this).height(this.scrollHeight);
 };
 
-App.prototype.submitChanges = function (e) { //save or update news message
+//save or update news message
+App.prototype.submitChanges = function (e) {
+
+    function escapeHtml(text) {
+        return text
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+    }
 
     var title = $('.title textarea'),
         shortDescription = $('.shortDescription textarea'),
         fullDescription = $('.fullDescription textarea'),
-        titleTrimmed = title.val().trim(),
-        shortDescriptionTrimmed = shortDescription.val().trim(),
-        fullDescriptionTrimmed = fullDescription.val().trim();
+        titleTrimmed = escapeHtml(title.val().trim()),
+        shortDescriptionTrimmed = escapeHtml(shortDescription.val().trim()),
+        fullDescriptionTrimmed = escapeHtml(fullDescription.val().trim());
 
-    if (titleTrimmed && shortDescriptionTrimmed && fullDescriptionTrimmed) { //if all fields not empty
-        e.preventDefault(); //don't refresh the page
+    if (titleTrimmed && shortDescriptionTrimmed && fullDescriptionTrimmed) {
+        e.preventDefault();
         var url = window.location.hash,
             self = this,
             temp = url.split('/'),
@@ -130,20 +145,20 @@ App.prototype.submitChanges = function (e) { //save or update news message
                 shortDescription: shortDescriptionTrimmed,
                 body: fullDescriptionTrimmed
             };
-        if (temp[0] === "#addNews") { //if add news message
+        if (temp[0] === "#addNews") {
             this.httpService.addNews(data, function (data) {
-                self.curState = window.location.hash = "#news/" + data.newsId; //go to news message state
+                self.curState = window.location.hash = "#news/" + data.newsId;
             }, function (jqXHR) {
-                self.errorState(jqXHR.status); //if error go to error state
+                self.errorState(jqXHR.status);
             });
         } else { //if edit news message
             this.httpService.changeNews(temp[1], data, function () {
-                self.curState = window.location.hash = "#news/" + temp[1]; //go to news message state
+                self.curState = window.location.hash = "#news/" + temp[1];
             }, function (jqXHR) {
-                self.errorState(jqXHR.status); //if error go to error state
+                self.errorState(jqXHR.status);
             });
         }
-    } else { //will showed build-in warning if one of fields is empty
+    } else {
         title.val(titleTrimmed);
         shortDescription.val(shortDescriptionTrimmed);
         fullDescription.val(fullDescriptionTrimmed);
@@ -151,16 +166,18 @@ App.prototype.submitChanges = function (e) { //save or update news message
 
 };
 
-App.prototype.updateUI = function () { //update language of interface
+//update language of interface
+App.prototype.updateUI = function () {
     var self = this;
     $('[data-translation]').each(function (index, val) {
         $(val).text(self.userLang[$(val).data("translation")]);
     });
 };
 
-App.prototype.drawPagination = function (curPage) { //draw pagination on newsList state
+//draw pagination on newsList state
+App.prototype.drawPagination = function (curPage) {
     var temp = Math.ceil(curPage / 5);
-    $("main").append(this.templateParser("pagination", { //parse pagination template
+    $("main").append(this.templateParser("pagination", {
         curPage: curPage,
         startPage: (temp - 1) * 5 + 1,
         numberOfPages: this.numberOfPages,
@@ -187,25 +204,28 @@ App.prototype.eventsListeners = function () {
 
 };
 
-App.prototype.deleteNews = function () { //delete news message
+//delete news message
+App.prototype.deleteNews = function () {
     var self = this,
         id = $('[data-news-id]')[0].dataset.newsId;
-    this.httpService.deleteNews(id, function () { //go to newsList state
+    this.httpService.deleteNews(id, function () {
         if (window.location.hash.split('/')[0] === "#page") {
             self.render();
         } else {
             window.location.hash = "#page/1";
         }
     }, function (jqXHR) {
-        self.errorState(jqXHR.status); //if error go to error state
+        self.errorState(jqXHR.status);
     });
 };
 
+//add deleting news id to "confirm deleting news" button
 App.prototype.addDataAttr = function (e) {
-    $('.confirmDeletingNews')[0].dataset.newsId = $(e.target).data('id'); //add deleting news id to "confirm deleting news" button
+    $('.confirmDeletingNews')[0].dataset.newsId = $(e.target).data('id');
 };
 
-App.prototype.newsDateFormatting = function () { //formatting news date
+//formatting news date
+App.prototype.newsDateFormatting = function () {
 
     function dateFormatting(str) {
         var curDate = new Date(str),
@@ -217,7 +237,7 @@ App.prototype.newsDateFormatting = function () { //formatting news date
         return addZero(date) + '-' + addZero(month) + '-' + year + ' ' + addZero(hours) + ':' + addZero(minutes);
     }
 
-    function addZero(data) { //add '0' before number if it less then 10
+    function addZero(data) {
         if (data < 10) {
             data = '0' + data;
         }
@@ -231,7 +251,8 @@ App.prototype.newsDateFormatting = function () { //formatting news date
 
 };
 
-App.prototype.exitWithoutSaving = function () { //confirm exit without saving
+//confirm exit without saving
+App.prototype.exitWithoutSaving = function () {
     this.curState = this.lastState;
     window.location.hash = this.lastState;
 };
